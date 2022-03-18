@@ -23,7 +23,6 @@ cycle. Journal of Neurophysiology 87:995-1006, 2002.
 """
 
 import math
-
 from neuron import h
 
 
@@ -54,7 +53,7 @@ class MRG:
         self.Rpx = gp['Rpx']
         self.interlength = gp['interlength']
 
-        # initialize instance vairables that will be set later
+        # initialize instance variables that will be set later
         self.axonnodes = nodes
         self.paranodes1 = None
         self.paranodes2 = None
@@ -77,11 +76,12 @@ class MRG:
         self.build_topology(nodes)
         self.define_geometry()
         self.define_biophysics()
-        self.init_voltages()
 
         self.all = h.SectionList()
         self.all.wholetree(sec=self.node[0])
         self.py_all = list(self.all)
+
+        self.init_voltages()
 
     @staticmethod
     def geometric_params(diameter):
@@ -187,7 +187,7 @@ class MRG:
     @staticmethod
     def _complete_geometric_params(nodeD, paraD1, paraD2, axonD, deltax,
                                    paralength2, nl):
-        rhoa = 0.7e6        # [ohm-um]
+        rhoa = 0.7e6        # [ohm-um] axoplasmic resistivity
         nodelength = 1.0    # Length of node of ranvier [um]
         paralength1 = 3     # Length of MYSA [um]
         space_p1 = 0.002    # Thickness of periaxonal space in MYSA [um]
