@@ -179,6 +179,7 @@ class MRG:
             paraD2 = 12.7
             deltax = 1500
             paralength2 = 60
+            nl = 150 # Check with Brandon - imputed
         return {
             'axonD': axonD, 'nodeD': nodeD, 'paraD1': paraD1, 'paraD2': paraD2,
             'deltax': deltax, 'paralength2': paralength2, 'nl': nl
