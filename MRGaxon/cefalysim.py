@@ -25,7 +25,7 @@ fiber = MRG(5.7, 51)
 
 # MODEL SPECIFICATION
 # time params =========================================================================
-h.tstop = 25 # [ms]: simulation time
+h.tstop = 5 # [ms]: simulation time
 h.dt = 0.001 # [ms]: timestep
 
 # cell parameters defined in MRG model
@@ -36,8 +36,8 @@ sigma_e = 0.00043 # [S/mm]: extracellular medium resistivity (skin)
 # stim params =========================================================================
 delay = 1 # [ms]: start time of stim
 dur = 0.25 # [ms]: pulse width of (monopolar) stim
-amp = 5 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular (negative cathodic, positive anodic)
-e2f = 3 # [mm]: electrode to fiber distance
+amp = 11.5 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular (negative cathodic, positive anodic)
+e2f = 4.27 # [mm]: electrode to fiber distance (4.27 mm - STNm, 7.53 STNl))
 
 # MODEL INITIALIZATION
 # define nodes for cell =================================================================
@@ -99,9 +99,24 @@ h.continuerun(h.tstop)
 # DATA POST PROCESSING / OUTPUT
 # plot things ==============================================================================
 # print(vol_mem)
-plt.plot(tvec, vol_mem[25])
-plt.xlabel('Time (ms)')
-plt.ylabel('Vm (mA)')
-plt.show()
+# plt.plot(tvec, vol_mem[25])
+# plt.xlabel('Time (ms)')
+# plt.ylabel('Vm (mV)')
+# plt.title('Membrane Potential vs Time: D = 5.7 um, Amp = 11.5 mA')
+# plt.show()
+
+
+# Stimulation Waveform Plot
+# current = [0]*200
+# current50 = [0]*50
+# l6 = [16]*250
+# l6minus = [-16]*250
+# currentF = current+l6+l6minus+current+current50+current50
+# time = list(range(1000))
+# plt.plot(time, currentF)
+# plt.xlabel('Time (us)')
+# plt.ylabel('Current Stimulus (mA)')
+# plt.title('Stimulation Waveform: Amp = 16 mA, Dur = 250 us')
+# plt.show()'''
 
 print('============ DONE ============')
