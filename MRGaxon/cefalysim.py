@@ -36,8 +36,8 @@ sigma_e = 0.00043 # [S/mm]: extracellular medium resistivity (skin)
 # stim params =========================================================================
 delay = 1 # [ms]: start time of stim
 dur = 0.25 # [ms]: pulse width of (monopolar) stim
-amp = 11.5 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular (negative cathodic, positive anodic)
-e2f = 4.27 # [mm]: electrode to fiber distance (4.27 mm - STNm, 7.53 STNl))
+amp = 11.4 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular (negative cathodic, positive anodic)
+e2f = 7.53 # [mm]: electrode to fiber distance (4.27 mm - STNm, 7.53 STNl))
 
 # MODEL INITIALIZATION
 # define nodes for cell =================================================================
@@ -66,15 +66,31 @@ tvec = h.Vector().record(h._ref_t)
 def update_field():
     #print(h.t)
     phi_e = []
+    mysa_phi = []
+    flut_phi = []
+    stin_phi = []
         
     for node_ind, node in enumerate(fiber.node):
         # Bipolar stimulus
-        x_loc1 = 1e-3 * (-(fiber.axonnodes - 1) / 2 * fiber.interlength + fiber.interlength * node_ind)  # 1e-3 [um] -> [mm]
+        x_loc1 = 1e-3 * (-(fiber.axonnodes - 1) / 2 * fiber.deltax + fiber.deltax * node_ind)  # 1e-3 [um] -> [mm]
         x_loc2 = x_loc1 + 13  # Shifted 13 mm from first contact
         r1 = np.sqrt(x_loc1 ** 2 + e2f ** 2)  # [mm]
         r2 = np.sqrt(x_loc2 ** 2 + e2f ** 2)  # [mm]
         phi_e.append((e_stim_obj.i / (4 * sigma_e * np.pi * r1)) + (-1 * e_stim_obj.i / (4 * sigma_e * np.pi * r2)))
         node(0.5).e_extracellular = phi_e[node_ind]
+
+'''
+    for mysa_ind, mysa in enumerate(fiber.MYSA):
+        # x_loc1 = 1e-3 * (-(fiber.paranodes1 - 1) / 2 * fiber.)
+        # x_loc2 = x_loc1 + 13
+        # mysa(0.5).e_extracellular = mysa_phi[mysa_ind]
+
+    for flut_ind, flut in enumerate(fiber.FLUT):
+        # flut(0.5).e_extracellular = flut_phi[flut_ind]
+
+    for stin_ind, stin in enumerate(fiber.STIN):
+        # stin(0.5)._extracellular = stin_phi[stin_ind]
+'''
 
         # ========== left these in so you can check out in debugger ==========
         # x_axon.append(x_loc) # centered at middle node for an odd # of nodes
@@ -99,11 +115,11 @@ h.continuerun(h.tstop)
 # DATA POST PROCESSING / OUTPUT
 # plot things ==============================================================================
 # print(vol_mem)
-# plt.plot(tvec, vol_mem[25])
-# plt.xlabel('Time (ms)')
-# plt.ylabel('Vm (mV)')
-# plt.title('Membrane Potential vs Time: D = 5.7 um, Amp = 11.5 mA')
-# plt.show()
+plt.plot(tvec, vol_mem[0])
+plt.xlabel('Time (ms)')
+plt.ylabel('Vm (mV)')
+plt.title('Membrane Potential vs Time: D = 5.7 um, Amp = 11.5 mA')
+plt.show()
 
 
 # Stimulation Waveform Plot
