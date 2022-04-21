@@ -36,7 +36,7 @@ sigma_e = 0.00043 # [S/mm]: extracellular medium resistivity (skin)
 # stim params =========================================================================
 delay = 1 # [ms]: start time of stim
 dur = 0.25 # [ms]: pulse width of (monopolar) stim
-amp = 16 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular (negative cathodic, positive anodic)
+amp = -8 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular:(-)cathodic, (+)anodic)
 # e2f = 7.53 # [mm]: electrode to fiber distance (4.27 mm - STNm, 7.53 STNl))
 x_e2f = 12.8 # [mm]: x distance of closest electrode to first node
 y_e2f = 15 # [mm]: y distance of closest electrode to first node
@@ -83,9 +83,10 @@ def update_field():
 
     for mysa_ind, mysa in enumerate(fiber.MYSA):
         if mysa_ind%2 == 0: # Even MYSA index case - first MYSA of section
-            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + 2) # 2 um separation from center of node to center of MYSA
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + 1.5) # 1.5 um separation from end of node to center of MYSA
         else:
-            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + 1.5 * fiber.MYSA.L + 2 * fiber.FLUT.L + 6 * fiber.STIN.L)
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + 1.5 * fiber.paralength1 + 2 * fiber.paralength2 +
+                                  6 * fiber.interlength)
         r1 = np.sqrt(x_e2f**2 + y_loc**2 + z_e2f**2)
         r2 = np.sqrt((x_e2f+13)**2 + y_loc**2 + z_e2f**2)
         mysa_phi.append((e_stim_obj.i / (4 * sigma_e * np.pi * r1)) + (-1 * e_stim_obj.i / (4 * sigma_e * np.pi * r2)))
@@ -93,9 +94,10 @@ def update_field():
 
     for flut_ind, flut in enumerate(fiber.FLUT):
         if flut_ind%2 == 0: # Even FLUT index case - first FLUT of section
-            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + 4 + fiber.FLUT.L/2)
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + 3 + fiber.interlength/2)
         else:
-            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + fiber.MYSA.L + 1.5 * fiber.FLUT.L + 6 * fiber.STIN.L)
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + fiber.paralength1 + 1.5 * fiber.paralength2 +
+                                  6 * fiber.interlength)
         r1 = np.sqrt(x_e2f**2 + y_loc**2 + z_e2f**2)
         r2 = np.sqrt((x_e2f+13)**2 + y_loc**2 + z_e2f**2)
         flut_phi.append((e_stim_obj.i / (4 * sigma_e * np.pi * r1)) + (-1 * e_stim_obj.i / (4 * sigma_e * np.pi * r2)))
@@ -106,11 +108,12 @@ def update_field():
             stin_count = 0
         else:
             stin_count = 6 - stin_ind%6
-        y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + fiber.MYSA.L + fiber.FLUT.L + (stin_count + 0.5) * fiber.STIN.L)
+        y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + fiber.paralength1 + fiber.paralength2 +
+                              (stin_count + 0.5) * fiber.interlength)
         r1 = np.sqrt(x_e2f**2 + y_loc**2 + z_e2f**2)
         r2 = np.sqrt((x_e2f+13)**2 + y_loc**2 + z_e2f**2)
         stin_phi.append((e_stim_obj.i / (4 * sigma_e * np.pi * r1)) + (-1 * e_stim_obj.i / (4 * sigma_e * np.pi * r2)))
-        stin(0.5)._extracellular = stin_phi[stin_ind]
+        stin(0.5).e_extracellular = stin_phi[stin_ind]
 
 
         # ========== left these in so you can check out in debugger ==========
