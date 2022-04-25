@@ -36,10 +36,10 @@ sigma_e = 0.00043 # [S/mm]: extracellular medium resistivity (skin)
 # stim params =========================================================================
 delay = 1 # [ms]: start time of stim
 dur = 0.25 # [ms]: pulse width of (monopolar) stim
-amp = -26.3 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular:(-)cathodic, (+)anodic)
+amp = -7.5 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular:(-)cathodic, (+)anodic)
 # e2f = 7.53 # [mm]: electrode to fiber distance (4.27 mm - STNm, 7.53 STNl))
-x_e2f = 19.26 # [mm]: x distance of closest electrode to first node - SON=19.26, STN=10.6
-y_e2f = 15 # [mm]: y distance of closest electrode to first node - SON=15, STN=6.3
+x_e2f = 10.6 # [mm]: x distance of closest electrode to first node - SON=19.26, STN=10.6
+y_e2f = 7.3 # [mm]: y distance of closest electrode to first node - SON=15, STN=6.3
 z_e2f = 3 # [mm]: depth of fiber to surface of skin (electrode on surface) - SON=3, STN=3
 
 # MODEL INITIALIZATION
@@ -67,7 +67,7 @@ tvec = h.Vector().record(h._ref_t)
 # SIMULATION CONTROL
 # compute extracellular potentials from point current source (call this from my_advance to update at each timestep)
 def update_field():
-    #print(h.t)
+    # print(h.t)
     phi_e = []
     mysa_phi = []
     flut_phi = []
@@ -83,10 +83,10 @@ def update_field():
 
     for mysa_ind, mysa in enumerate(fiber.MYSA):
         if mysa_ind%2 == 0: # Even MYSA index case - first MYSA of section
-            y_loc = y_e2f + 1e-3*(fiber.deltax * (mysa_ind/2) + 1.5) # 1.5 um separation from end of node to center of MYSA
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + 1.5) # 1.5 um separation from end of node to center of MYSA
         else:
-            y_loc = y_e2f + 1e-3*(fiber.deltax * np.trunc(mysa_ind/2) + 1.5 * fiber.paralength1 + 2 * fiber.paralength2 +
-                                  6 * fiber.interlength)
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + (1.5 * fiber.paralength1) + (2 * fiber.paralength2) +
+                                  (6 * fiber.interlength))
         r1 = np.sqrt(x_e2f**2 + y_loc**2 + z_e2f**2)
         r2 = np.sqrt((x_e2f+13)**2 + y_loc**2 + z_e2f**2)
         mysa_phi.append((e_stim_obj.i / (4 * sigma_e * np.pi * r1)) + (-1 * e_stim_obj.i / (4 * sigma_e * np.pi * r2)))
@@ -94,10 +94,10 @@ def update_field():
 
     for flut_ind, flut in enumerate(fiber.FLUT):
         if flut_ind%2 == 0: # Even FLUT index case - first FLUT of section
-            y_loc = y_e2f + 1e-3*(fiber.deltax * (flut_ind/2) + 3 + fiber.interlength/2)
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + fiber.paralength1 + fiber.paralength2/2)
         else:
-            y_loc = y_e2f + 1e-3*(fiber.deltax * np.trunc(flut_ind/2) + fiber.paralength1 + 1.5 * fiber.paralength2 +
-                                  6 * fiber.interlength)
+            y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + fiber.paralength1 + (1.5 * fiber.paralength2) +
+                                  (6 * fiber.interlength))
         r1 = np.sqrt(x_e2f**2 + y_loc**2 + z_e2f**2)
         r2 = np.sqrt((x_e2f+13)**2 + y_loc**2 + z_e2f**2)
         flut_phi.append((e_stim_obj.i / (4 * sigma_e * np.pi * r1)) + (-1 * e_stim_obj.i / (4 * sigma_e * np.pi * r2)))
@@ -108,7 +108,7 @@ def update_field():
             stin_count = 0
         else:
             stin_count = 6 - stin_ind%6
-        y_loc = y_e2f + 1e-3*(fiber.deltax * np.trunc(stin_ind/6) + fiber.paralength1 + fiber.paralength2 +
+        y_loc = y_e2f + 1e-3*(fiber.deltax * node_ind + fiber.paralength1 + fiber.paralength2 +
                               (stin_count + 0.5) * fiber.interlength)
         r1 = np.sqrt(x_e2f**2 + y_loc**2 + z_e2f**2)
         r2 = np.sqrt((x_e2f+13)**2 + y_loc**2 + z_e2f**2)
@@ -164,6 +164,24 @@ plt.show()
 # plt.xlabel('Time (us)')
 # plt.ylabel('Current Stimulus (mA)')
 # plt.title('Stimulation Waveform: Amp = 16 mA, Dur = 250 us')
-# plt.show()'''
+# plt.show()
+
+# Threshold vs Diameter Plot
+# diams = [5.7, 7.3, 8.7, 10, 11.5, 12.8, 14, 15, 16]
+# son1_thresh = [26.3, 19.4, 15.8, 14.4, 13.7, 13, 12.9, 12.7, 12.5]
+# son2_thresh = [26.8, 19.8, 16.1, 14.7, 14, 13.3, 13.1, 12.9, 12.7]
+# son3_thresh = [27.8, 20.5, 16.6, 15.2, 14.4, 13.7, 13.5, 13.3, 13.1]
+# son4_thresh = [28.4, 20.9, 16.9, 15.4, 14.8, 13.9, 13.7, 13.5, 13.4]
+# plt.plot(diams, son1_thresh, label='SON1')
+# plt.plot(diams, son2_thresh, label='SON2')
+# plt.plot(diams, son3_thresh, label='SON3')
+# plt.plot(diams, son4_thresh, label='SON4')
+# plt.ylim(10,30)
+# plt.axhline(y=16, color='r', linestyle='--', alpha=0.5, label='Max Cefaly Current')
+# plt.xlabel('Fiber Diameter (um)')
+# plt.ylabel('Current Threshold (mA)')
+# plt.title('Activation Threshold vs Diameter')
+# plt.legend()
+# plt.show()
 
 print('============ DONE ============')

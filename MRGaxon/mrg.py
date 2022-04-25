@@ -30,7 +30,7 @@ class MRG:
 
     def __init__(self, diameter, nodes):
         # check the diameter is one used in the original MRG implementation
-        if diameter not in {5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0}:
+        if diameter not in {1, 2, 3, 4, 5, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0}:
             raise ValueError(f'{diameter} is not one of the original MRG fiber diameters')
         gp = self.geometric_params(diameter)
 
@@ -108,6 +108,14 @@ class MRG:
             deltax = 200
             paralength2 = 10
             nl = 30
+        elif fiberD == 3 or 4 or 5:
+            nl = -0.4749 * fiberD ^ 2 + 16.85 * fiberD - 0.7648
+            nodeD = 0.01093 * fiberD ^ 2 + 0.1008 * fiberD + 1.099
+            paraD1 = nodeD
+            paraD2 = 0.02361 * fiberD ^ 2 + 0.3673 * fiberD + 0.7122
+            axonD = paraD2
+            paralength2 = -0.1652 * fiberD ^ 2 + 6.354 * fiberD - 0.2862
+            deltax = 81.08 * fiberD + 37.84
         elif fiberD == 5.7:
             axonD = 3.4
             nodeD = 1.9
