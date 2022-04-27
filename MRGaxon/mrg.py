@@ -92,29 +92,29 @@ class MRG:
 
     @staticmethod
     def _classic_geometric_params(fiberD):
-        if fiberD == 1.0:
-            axonD = 0.8
-            nodeD = 0.7
-            paraD1 = 0.7
-            paraD2 = 0.8
-            deltax = 100
-            paralength2 = 5
-            nl = 15
-        elif fiberD == 2.0:
-            axonD = 1.6
-            nodeD = 1.4
-            paraD1 = 1.4
-            paraD2 = 1.6
-            deltax = 200
-            paralength2 = 10
-            nl = 30
-        elif fiberD == 3 or 4 or 5:
-            nl = -0.4749 * fiberD ^ 2 + 16.85 * fiberD - 0.7648
-            nodeD = 0.01093 * fiberD ^ 2 + 0.1008 * fiberD + 1.099
+        # if fiberD == 1.0:
+        #     axonD = 0.8
+        #     nodeD = 0.7
+        #     paraD1 = 0.7
+        #     paraD2 = 0.8
+        #     deltax = 100
+        #     paralength2 = 5
+        #     nl = 15
+        # elif fiberD == 2.0:
+        #     axonD = 1.6
+        #     nodeD = 1.4
+        #     paraD1 = 1.4
+        #     paraD2 = 1.6
+        #     deltax = 200
+        #     paralength2 = 10
+        #     nl = 30
+        if fiberD == 1 or 2 or 3 or 4 or 5:
+            nl = -0.4749 * fiberD**2 + 16.85 * fiberD - 0.7648
+            nodeD = 0.01093 * fiberD**2 + 0.1008 * fiberD + 1.099
             paraD1 = nodeD
-            paraD2 = 0.02361 * fiberD ^ 2 + 0.3673 * fiberD + 0.7122
+            paraD2 = 0.02361 * fiberD**2 + 0.3673 * fiberD + 0.7122
             axonD = paraD2
-            paralength2 = -0.1652 * fiberD ^ 2 + 6.354 * fiberD - 0.2862
+            paralength2 = -0.1652 * fiberD**2 + 6.354 * fiberD - 0.2862
             deltax = 81.08 * fiberD + 37.84
         elif fiberD == 5.7:
             axonD = 3.4
