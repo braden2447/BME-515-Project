@@ -21,7 +21,7 @@ h.load_file('stdrun.hoc')
 h.celsius = 37
 
 # create MRG fiber model
-fiber = MRG(5.7, 51) # D = 5.7, 7.3, 8.7, 10, 11.5, 12.8, 14, 15, 16
+fiber = MRG(4, 51) # D = 5.7, 7.3, 8.7, 10, 11.5, 12.8, 14, 15, 16
 
 # MODEL SPECIFICATION
 # time params =========================================================================
@@ -36,10 +36,10 @@ sigma_e = 0.00043 # [S/mm]: extracellular medium resistivity (skin)
 # stim params =========================================================================
 delay = 1 # [ms]: start time of stim
 dur = 0.25 # [ms]: pulse width of (monopolar) stim
-amp = -7.5 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular:(-)cathodic, (+)anodic)
+amp = -4.6 # [mA (EC)/nA (IC)]: amplitude of stim object -- but we are applying this extracellular:(-)cathodic, (+)anodic)
 # e2f = 7.53 # [mm]: electrode to fiber distance (4.27 mm - STNm, 7.53 STNl))
-x_e2f = 10.6 # [mm]: x distance of closest electrode to first node - SON=19.26, STN=10.6
-y_e2f = 7.3 # [mm]: y distance of closest electrode to first node - SON=15, STN=6.3
+x_e2f = 4.9 # [mm]: x distance of closest electrode to first node - SON=19.26, STN=13, 4.9
+y_e2f = 6.3 # [mm]: y distance of closest electrode to first node - SON=15, STN=6.3, 6.3
 z_e2f = 3 # [mm]: depth of fiber to surface of skin (electrode on surface) - SON=3, STN=3
 
 # MODEL INITIALIZATION
@@ -167,20 +167,24 @@ plt.show()
 # plt.show()
 
 # Threshold vs Diameter Plot
-# diams = [5.7, 7.3, 8.7, 10, 11.5, 12.8, 14, 15, 16]
-# son1_thresh = [26.3, 19.4, 15.8, 14.4, 13.7, 13, 12.9, 12.7, 12.5]
-# son2_thresh = [26.8, 19.8, 16.1, 14.7, 14, 13.3, 13.1, 12.9, 12.7]
-# son3_thresh = [27.8, 20.5, 16.6, 15.2, 14.4, 13.7, 13.5, 13.3, 13.1]
-# son4_thresh = [28.4, 20.9, 16.9, 15.4, 14.8, 13.9, 13.7, 13.5, 13.4]
+# diams = [5.7, 7.3, 8.7, 10, 11.5, 12.8, 14, 15]
+# son1_thresh = [26.3, 19.4, 15.8, 14.4, 13.7, 13, 12.9, 12.7]
+# son2_thresh = [26.8, 19.8, 16.1, 14.7, 14, 13.3, 13.1, 12.9]
+# son3_thresh = [27.8, 20.5, 16.6, 15.2, 14.4, 13.7, 13.5, 13.3]
+# son4_thresh = [28.4, 20.9, 16.9, 15.4, 14.8, 13.9, 13.7, 13.5]
+# stnl_thresh = [10.5, 8.6, 7.6, 6.9, 6.3, 5.9, 5.6, 5.4]
+# stnm_thresh = [3.4, 3, 2.7, 2.5, 2.3, 2.1, 2.05, 2]
 # plt.plot(diams, son1_thresh, label='SON1')
 # plt.plot(diams, son2_thresh, label='SON2')
 # plt.plot(diams, son3_thresh, label='SON3')
 # plt.plot(diams, son4_thresh, label='SON4')
-# plt.ylim(10,30)
-# plt.axhline(y=16, color='r', linestyle='--', alpha=0.5, label='Max Cefaly Current')
+# plt.plot(diams, stnl_thresh, label='STN-L')
+# plt.plot(diams, stnm_thresh, label='STN-M')
+# plt.ylim(1, 12)
+# plt.axhline(y=16, alpha=0.5, color='r', linestyle='--', label = 'Cefaly Max Current')
 # plt.xlabel('Fiber Diameter (um)')
 # plt.ylabel('Current Threshold (mA)')
-# plt.title('Activation Threshold vs Diameter')
+# plt.title('Activation Threshold vs Diameter, STN')
 # plt.legend()
 # plt.show()
 
