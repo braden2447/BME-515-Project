@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/braden2447/BME-515-Project/blob/main/LICENSE)
 
-# BME-515-Project
+# Cefaly Dual NEURON Model and Device Analysis
 
 ## Authors: Braden Garrison, Rocio Rodriguez, Shane Beyer
 
